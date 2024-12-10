@@ -1,7 +1,11 @@
 import axios from "axios";
-import config from "../config.js";
+import config from "../config";
 
-const { apiBaseUrl } = config || {};
+//const { apiBaseUrl } = config || {};
+
+const apiUrl = config.apiBaseUrl;
+
+console.log(apiUrl);
 
 export async function client(url, {
   body,
@@ -22,7 +26,7 @@ export async function client(url, {
   const config = {
     url,
     method,
-    baseURL: apiBaseUrl,
+    baseURL: apiUrl,
     headers,
     data: method === "GET" ? null : body,
   };
@@ -61,6 +65,7 @@ client.get = function (url, customConfig = {}) {
 };
 
 client.post = function (url, body, customConfig = {}) {
+  console.log(url);
   return client(url, { ...customConfig, method: "POST", body });
 };
 
