@@ -1,3 +1,11 @@
-export default {
-    apiBaseUrl: import.meta.env.API_BASE_URL
-}
+
+
+const config = {
+    apiBaseUrl: process.env.REACT_APP_API_BASE_URL
+  };
+  
+  export default config;
+
+
+
+  
