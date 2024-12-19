@@ -11,6 +11,19 @@ export async function client(url, {
   includeAuthorization = true,
   ...customConfig } = {}) {
 
+  const tokenExpiry = localStorage.getItem("tokenExpiry");
+
+  // Check if token is about to expire (e.g., within the next 5 minutes)
+  if (tokenExpiry && Date.now() > tokenExpiry - 5 * 60 * 1000) {
+    const refreshedToken = await refreshToken();
+    if (refreshedToken) {
+      localStorage.setItem("token", refreshedToken);
+      // Get the new token's expiry time and store it
+      const decoded = decodeJwt(refreshedToken);
+      localStorage.setItem("tokenExpiry", decoded.exp * 1000);
+    }
+  }
+
   const headers = {
     ...(includeAuthorization && { Authorization: accessToken }),
   };
@@ -71,3 +84,23 @@ client.put = function (url, body, customConfig = {}) {
 client.delete = function (url, body, customConfig = {}) {
   return client(url, { ...customConfig, method: "DELETE", body });
 };
+
+
+async function refreshToken() {
+  const refreshToken = localStorage.getItem("refreshToken");
+
+  if (!refreshToken) {
+    // No refresh token available, user needs to log in again
+    return null;
+  }
+
+  try {
+    const response = await axios.post(`${apiBaseUrl}/refresh-token`, { refreshToken });
+    if (response.status === 200) {
+      return response.data.newToken; // Assuming the server returns a new token
+    }
+  } catch (error) {
+    console.error("Error refreshing token:", error);
+    return null;
+  }
+}
