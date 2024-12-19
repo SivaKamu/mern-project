@@ -15,16 +15,7 @@ const Login = () => {
 
     const onSubmit = (data) => {
         // Dispatch the login action
-        dispatch(login(data));
-        
-        // Navigate to the OTP component and pass type as 'login' along with email and password
-        navigate('/otp', {
-            state: {
-                email: data.email,
-                password: data.password,
-                type: 'login',
-            },
-        });
+        dispatch(login(data, navigate));
     };  
 
     const isLoading = useSelector((state) => state.authDataSlice?.isLoading);
@@ -74,7 +65,7 @@ const Login = () => {
                                 <input type="checkbox" />
                                 Remember me
                             </p>
-                            <p className="opacity-60">Forgot Password?</p>
+                            <p onClick={() => navigate('/forgotPassword')} className="opacity-60 cursor-pointer">Forgot Password?</p>
                         </div>
                         <div>
                             <button
