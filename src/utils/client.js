@@ -52,12 +52,6 @@ client.interceptors.response.use(
   },
   async (error) => {
     if (error.response?.status === 401) {
-      // Token expired or invalid
-      // toast.error("Session expired. Please log in again.");
-      // localStorage.removeItem("token"); // Clear invalid token
-      // window.location.href = "/login"; // Redirect to login page
-
-
       try {
         const newAccessToken = await refreshAccessToken();
         // Retry the original request with the new access token
@@ -66,10 +60,8 @@ client.interceptors.response.use(
       } catch (err) {
         console.error("Token refresh failed", err);
         // Optionally log out the user or redirect to login screen
-        window.location.href = "/login"; // Redirect to login page (if necessary)
+        window.location.href = "/login";
       }
-
-
     }
     return Promise.reject(error);
   }

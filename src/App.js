@@ -7,6 +7,8 @@ import OtpSignUp from './Otp/Otp';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Home from './home/home';
+import ForgotPassword from './ForgotPassword/ForgotPassword';
+import ResetPassword from './ResetPassword/ResetPassword';
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
         <Route path="/" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/otp" element={<OtpSignUp />} />
+        <Route path="/forgotPassword" element={<ForgotPassword />} />
+        <Route path="/resetPassword/:token" element={<ResetPassword />} />
         <Route path="/home" element={<Home />} />
       </Routes>
 

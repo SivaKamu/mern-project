@@ -1,11 +1,10 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signUp } from '../store/features/authData';
 
-
-const SignUp = () =>{
+const SignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
@@ -15,13 +14,27 @@ const SignUp = () =>{
   } = useForm();
 
   const onSubmit = (data) => {
-    dispatch(signUp(data, navigate))
+    dispatch(signUp(data, navigate));
+  };
+
+
+  const handleLoginClick = () => {
+    navigate('/login');
   };
 
   const isLoading = useSelector((state) => state.authDataSlice?.isLoading);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      {/* Top Right Login Link */}
+      <div className="absolute top-4 right-4">
+      <button
+          onClick={handleLoginClick}
+          className="text-blue-500 hover:underline font-medium"
+        >
+          Sign In
+        </button>
+      </div>
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-6">Sign Up</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -44,12 +57,12 @@ const SignUp = () =>{
             <input
               type="email"
               id="email"
-              {...register('email', { 
+              {...register('email', {
                 required: 'Email is required',
                 pattern: {
                   value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                   message: 'Enter a valid email',
-                }
+                },
               })}
               className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -83,6 +96,6 @@ const SignUp = () =>{
       </div>
     </div>
   );
-}
+};
 
 export default SignUp;
