@@ -15,7 +15,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-blue-600 text-white py-4 px-6 flex items-center justify-between sticky top-0 z-50 shadow-md">
+    <header className="bg-gray-100 text-gray-800 py-4 px-6 flex items-center justify-between sticky top-0 z-50 shadow-md">
       <div className="flex items-center space-x-4">
         <img
           src="/logo.png"
@@ -26,26 +26,26 @@ const Header = () => {
       </div>
 
       <nav className="flex space-x-6">
-        <a href="#" className="hover:underline">
+        <a href="#" className="hover:text-blue-600 font-medium">
           Dashboard
         </a>
-        <a href="#" className="hover:underline">
+        <a href="#" className="hover:text-blue-600 font-medium">
           Stock Values
         </a>
-        <a href="#" className="hover:underline">
+        <a href="#" className="hover:text-blue-600 font-medium">
           Fundamental Overview
         </a>
-        <a href="#" className="hover:underline">
+        <a href="#" className="hover:text-blue-600 font-medium">
           Crypto Currency
         </a>
-        <a href="#" className="hover:underline">
+        <a href="#" className="hover:text-blue-600 font-medium">
           Foreign Exchange
         </a>
       </nav>
 
       <button
         onClick={handleLogout}
-        className="bg-red-500 px-4 py-2 rounded text-white font-bold hover:bg-red-600"
+        className="bg-blue-500 px-4 py-2 rounded text-white font-medium hover:bg-blue-600 transition duration-200 shadow-md"
       >
         Logout
       </button>
