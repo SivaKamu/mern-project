@@ -15,18 +15,16 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-blue-600 text-white py-4 px-6 flex items-center justify-between">
-      {/* Logo */}
+    <header className="bg-blue-600 text-white py-4 px-6 flex items-center justify-between sticky top-0 z-50 shadow-md">
       <div className="flex items-center space-x-4">
         <img
-          src="/logo.png" // Replace with your logo path
+          src="/logo.png"
           alt="Logo"
           className="h-8 w-8"
         />
         <span className="text-lg font-bold">My App</span>
       </div>
 
-      {/* Navigation Menu */}
       <nav className="flex space-x-6">
         <a href="#" className="hover:underline">
           Dashboard
@@ -45,7 +43,6 @@ const Header = () => {
         </a>
       </nav>
 
-      {/* Logout Button */}
       <button
         onClick={handleLogout}
         className="bg-red-500 px-4 py-2 rounded text-white font-bold hover:bg-red-600"
