@@ -1,16 +1,27 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchStockData } from '../store/features/authData';
 import { logout } from "../store/features/authData";
 import { useNavigate } from "react-router-dom";
 import StockChart from "../Charts/StockChart"; // Import the StockChart component
 import FinancialChart from "../Charts/FinancialChart";
-import CryptoLineChart from "../Charts/CryptoCurrencyChart";
 import CryptoCurrencyChart from "../Charts/CryptoCurrencyChart";
 import ForeignExchange from "../Charts/ForeignExchange";
 
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // Fetch stock data on component mount
+  useEffect(() => {
+   console.log("hi");
+   dispatch(fetchStockData());
+  }, [dispatch]);  // Adding dispatch to the dependency array to avoid stale closure
+  
+ // const stockData = useSelector((state) => state.authData.stockData);
+  const isLoading = useSelector((state) => state.authData.isLoading);  // Optional: Loading state to show a loader
+
+  //console.log(stockData); // Log stock data to see if it's being fetched properly
 
   // Logout handler
   const handleLogout = () => {
@@ -19,23 +30,8 @@ const Home = () => {
     navigate("/login");
   };
 
-  const stockData = {
-    dates: ['2024-12-18', '2024-12-19', '2024-12-20','2024-11-18', '2024-11-19', '2024-02-20','2024-01-18', '2024-09-19', '2024-10-20'],
-    ohlc: [
-      { date: '2024-12-18', o: 2520.0, h: 2530.0, l: 2495.0, c: 2520.5 },
-      { date: '2024-12-19', o: 2525.0, h: 2555.0, l: 2510.0, c: 2535.0 },
-      { date: '2024-12-20', o: 2535.0, h: 2565.0, l: 2525.0, c: 2550.5 },
-      { date: '2024-11-18', o: 2520.0, h: 2530.0, l: 2495.0, c: 2520.5 },
-      { date: '2024-11-19', o: 2525.0, h: 2555.0, l: 2510.0, c: 2535.0 },
-      { date: '2024-02-20', o: 2535.0, h: 2565.0, l: 2525.0, c: 2550.5 },
-      { date: '2024-01-18', o: 2520.0, h: 2530.0, l: 2495.0, c: 2520.5 },
-      { date: '2024-09-19', o: 2525.0, h: 2555.0, l: 2510.0, c: 2535.0 },
-      { date: '2024-10-20', o: 2535.0, h: 2565.0, l: 2525.0, c: 2550.5 },
-    ],
-  };
-
   const cryptoCurrencyData = {
-    dates: ['2024-12-18', '2024-12-19', '2024-12-20','2024-11-18', '2024-11-19', '2024-02-20','2024-01-18', '2024-09-19', '2024-10-20'],
+    dates: ['2024-12-18', '2024-12-19', '2024-12-20', '2024-11-18', '2024-11-19', '2024-02-20', '2024-01-18', '2024-09-19', '2024-10-20'],
     ohlc: [
       { date: '2024-12-18', o: 2520.0, h: 2530.0, l: 2495.0, c: 2520.5 },
       { date: '2024-12-19', o: 2525.0, h: 2555.0, l: 2510.0, c: 2535.0 },
@@ -81,7 +77,11 @@ const Home = () => {
             </div>
             {/* StockChart inside the Stock Values card */}
             <div className="mt-4">
-              <StockChart stockData={stockData} />
+              {isLoading ? (
+                <div>Loading...</div>
+              ) : (
+                <StockChart />
+              )}
             </div>
           </div>
 
@@ -100,10 +100,10 @@ const Home = () => {
                 </select>
               </div>
             </div>
-              {/* FundamentalChart inside the Stock Values card */}
-              <div className="mt-4">
-                <FinancialChart fundamentalData={fundamentalData} />
-              </div>
+            {/* FinancialChart inside the Stock Values card */}
+            <div className="mt-4">
+              <FinancialChart fundamentalData={fundamentalData} />
+            </div>
           </div>
 
           {/* Card 3: Crypto Currency */}

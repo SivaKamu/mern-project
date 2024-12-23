@@ -7,6 +7,7 @@ export const authDataSlice = createSlice({
   initialState: {
     isLoading: false,
     homeData: null,
+    stockData: []
   },
   reducers: {
     setIsLoading: (state, action) => {
@@ -15,10 +16,14 @@ export const authDataSlice = createSlice({
     setHomeData: (state, action) => {
         state.homeData = action.payload;
     },
+    setStockData: (state, action) => {
+      // Ensure the action payload is the correct data structure
+      state.stockData = action.payload; 
+    },
   },
 });
 
-export const { setIsLoading, setHomeData } = authDataSlice.actions;
+export const { setIsLoading, setHomeData, setStockData } = authDataSlice.actions;
 
 export default authDataSlice.reducer;
 
@@ -136,4 +141,12 @@ export const fetchHomeData = () => async (dispatch) => {
       }else if (result.data.statusCode === 409) {
         toast.error(result.data.message);
       }
+    };
+
+    export const fetchStockData = () => async (dispatch) => {
+      dispatch(setIsLoading(true));
+      const result = await request.get("/stockData/TIME_SERIES_DAILY/AAPL");
+      console.log(result); // Log the API response to check its structure
+      dispatch(setIsLoading(false));
+      dispatch(setStockData(result.data.allData));
     };
