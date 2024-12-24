@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from "react";
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, Title, Tooltip, Legend } from "chart.js";
+import { useSelector } from "react-redux";
 
 // Register chart.js components
 ChartJS.register(
@@ -11,7 +12,22 @@ ChartJS.register(
   Legend
 );
 
-const FinancialChart = ({ fundamentalData }) => {
+const FinancialChart = () => {
+  const fundamentalData = useSelector((state) => state.authData.fundamentalData);
+  console.log(fundamentalData);
+  useEffect(() => {
+      return () => {
+        if (window.myChart) {
+          window.myChart.destroy();
+        }
+      };
+    }, []); 
+
+    if (!fundamentalData) {
+      return <div>Loading chart...</div>; 
+    }
+
+
   const financialData = {
     labels: ['Market Cap', 'P/E Ratio', 'Revenue', 'Gross Profit', 'EBITDA'],  // Labels for financial metrics
     datasets: [
