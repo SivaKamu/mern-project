@@ -7,6 +7,8 @@ import StockChart from "../Charts/StockChart";
 import FinancialChart from "../Charts/FinancialChart";
 import CryptoCurrencyChart from "../Charts/CryptoCurrencyChart";
 import ForeignExchange from "../Charts/ForeignExchange";
+import { ClipLoader } from "react-spinners";
+
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -91,46 +93,54 @@ const Home = () => {
     <div className="min-h-screen bg-gray-100">
       <main className="p-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
-          <div className="bg-white shadow-lg rounded-lg p-4 h-160">
-          <div className="flex justify-between items-center">
-            <span className="text-lg font-semibold">Stock Values</span>
-            <div className="flex space-x-2">
-              {/* Timeseries Dropdown */}
-              <select
-                className="bg-gray-100 text-gray-700 border border-gray-300 rounded-md p-2 w-40"
-                onChange={handleTimeseriesChange}
-                value={timeSeries}
-              >
-                <option value="">Select Timeseries</option>
-                {timeseriesData.map((item) => (
-                  <option key={item.value} value={item.value}>
-                    {item.label}
-                  </option>
-                ))}
-              </select>
+        <div className="bg-white shadow-lg rounded-lg p-4 h-160">
+  <div className="flex justify-between items-center">
+    <span className="text-lg font-semibold">Stock Values</span>
+    <div className="flex space-x-2">
+      {/* Timeseries Dropdown */}
+      <select
+        className="bg-gray-100 text-gray-700 border border-gray-300 rounded-md p-2 w-40"
+        onChange={handleTimeseriesChange}
+        value={timeSeries}
+      >
+        <option value="">Select Timeseries</option>
+        {timeseriesData.map((item) => (
+          <option key={item.value} value={item.value}>
+            {item.label}
+          </option>
+        ))}
+      </select>
 
-              {/* Symbols Dropdown */}
-              {timeSeries && (
-                <select
-                  className="bg-gray-100 text-gray-700 border border-gray-300 rounded-md p-2 w-40"
-                  onChange={handleSymbolChange('StockData')}
-                  value={symbol}
-                >
-                  <option value="">Select Symbol</option>
-                  {symbolsData.map((item) => (
-                    <option key={item.value} value={item.value}>
-                      {item.label}
-                    </option>
-                  ))}
-                </select>
-              )}
-            </div>
-          </div>
+      {/* Symbols Dropdown */}
+      {timeSeries && (
+        <select
+          className="bg-gray-100 text-gray-700 border border-gray-300 rounded-md p-2 w-40"
+          onChange={handleSymbolChange('StockData')}
+          value={symbol}
+        >
+          <option value="">Select Symbol</option>
+          {symbolsData.map((item) => (
+            <option key={item.value} value={item.value}>
+              {item.label}
+            </option>
+          ))}
+        </select>
+      )}
+    </div>
+  </div>
 
-            <div className="mt-4">
-              {isLoading ? <div>Loading...</div> : <StockChart />}
-            </div>
-          </div>
+  {/* Loading or Chart */}
+  <div className="mt-4 h-60 flex items-center justify-center">
+    {isLoading ? (
+      <div className="flex justify-center items-center">
+        <ClipLoader size={50} color={"#123abc"} loading={isLoading} />
+      </div>
+    ) : (
+      <StockChart />
+    )}
+  </div>
+</div>
+
 
           <div className="bg-white shadow-lg rounded-lg p-4 h-160">
             <div className="flex justify-between items-center">
@@ -168,7 +178,7 @@ const Home = () => {
               </div>
             </div>
             <div className="mt-4">
-              <FinancialChart />
+              {isLoading ? <div>Loading...</div> : <FinancialChart />}
             </div>
           </div>
 

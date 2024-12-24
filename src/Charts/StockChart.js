@@ -4,6 +4,7 @@ import { CandlestickController, CandlestickElement } from "chartjs-chart-financi
 import { Chart } from "react-chartjs-2"; // Directly import Chart for Candlestick
 import 'chartjs-adapter-date-fns'; // Import date adapter
 import { useSelector } from "react-redux";
+import { ClipLoader } from "react-spinners";
 
 // Register chart.js components and the financial chart types
 ChartJS.register(
@@ -28,7 +29,7 @@ const StockChart = () => {
   }, []); 
 
   if (!stockData || !stockData.ohlc || stockData.ohlc.length === 0) {
-    return <div>Loading chart...</div>; 
+    return <ClipLoader size={50} color={"#123abc"} />; 
   }
 
   const formattedData = stockData.ohlc.map(item => ({

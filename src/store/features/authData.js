@@ -188,7 +188,8 @@ export const fetchFinancialData = () => async (dispatch, getState) => {
   const symbol = getState().authData.symbol;
   dispatch(setIsLoading(true));
   const result = await request.get(`/fundamentalData/${fundamentalFunctions}/${symbol}`);
-  console.log(result.data.allData[0]['data']); // Log the API response to check its structure
-  dispatch(setIsLoading(false));
+  console.log(result.data.allData[0].data.Information); // Log the API response to check its structure
+  if(result.data.allData[0].data.Information == 'Thank you for using Alpha Vantage! Our standard API rate limit is 25 requests per day. Please subscribe to any of the premium plans at https://www.alphavantage.co/premium/ to instantly remove all daily rate limits.'){ console.log('hiihihihi'); dispatch(setIsLoading(true));}
+  //dispatch(setIsLoading(false));
   dispatch(setFundamentalData(result.data.allData[0]['data']));
 };
