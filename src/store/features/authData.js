@@ -7,18 +7,52 @@ export const authDataSlice = createSlice({
   initialState: {
     isLoading: false,
     homeData: null,
+    timeSeries: 'TIME_SERIES_DAILY',
+    symbol: 'AAPL',
+    fundamentalFunctions: 'OVERVIEW',
+    stockData: [],
+    fundamentalData: {}
   },
   reducers: {
     setIsLoading: (state, action) => {
       state.isLoading = action.payload;
     },
     setHomeData: (state, action) => {
-        state.homeData = action.payload;
+      state.homeData = action.payload;
+    },
+    setTimeSeries: (state, action) => {
+      state.timeSeries = action.payload;
+    },
+    setSymbol: (state, action) => {
+      state.symbol = action.payload;
+    },
+    setFundamentalFunctions: (state, action) => {
+      state.fundamentalFunctions = action.payload;
+    },
+    setHomeData: (state, action) => {
+      state.homeData = action.payload;
+    },
+    setStockData: (state, action) => {
+      // Ensure the action payload is the correct data structure
+      state.stockData = action.payload;
+    },
+    setFundamentalData: (state, action) => {
+      // Ensure the action payload is the correct data structure
+      state.fundamentalData = action.payload;
     },
   },
 });
 
-export const { setIsLoading, setHomeData } = authDataSlice.actions;
+export const {
+  setIsLoading,
+  setHomeData,
+  setStockData,
+  setTimeSeries,
+  setSymbol,
+  setFundamentalFunctions,
+  setFundamentalData
+}
+  = authDataSlice.actions;
 
 export default authDataSlice.reducer;
 
@@ -32,7 +66,7 @@ export const signUp = (query, navigate) => async (dispatch) => {
     if (result.data.statusCode === 200) {
       toast.success(result.data.message);
       navigate('/otp', { state: { email: query.email, password: query.password, type: 'signup' } });
-    }else if (result.data.statusCode === 409) {
+    } else if (result.data.statusCode === 409) {
       toast.error(result.data.message);
     }
   } catch (error) {
@@ -47,12 +81,12 @@ export const login = (query, navigate) => async (dispatch) => {
   dispatch(setIsLoading(true));
   const result = await request.post("/login", query, { includeAuthorization: false });
   dispatch(setIsLoading(false));
-  console.log(result,"try");
+  console.log(result, "try");
   if (result.data.statusCode === 200) {
     toast.success(result.data.message);
-    navigate('/otp', { state: { email: query.email, password: query.password , type: 'login'} });
+    navigate('/otp', { state: { email: query.email, password: query.password, type: 'login' } });
     dispatch(setIsLoading(false));
-  }else if (result.data.statusCode === 409) {
+  } else if (result.data.statusCode === 409) {
     console.log("hi");
     toast.error(result.data.message);
   }
@@ -75,7 +109,7 @@ export const Otp = (query, navigate) => async (dispatch) => {
         localStorage.setItem("refreshToken", result.data.refreshToken); // Store refresh token
         navigate('/home');
       }
-    }else if (result.data.statusCode === 409) {toast.error(result.data.message);}
+    } else if (result.data.statusCode === 409) { toast.error(result.data.message); }
   } catch (error) {
     dispatch(setIsLoading(false));
     toast.error("Something went wrong! Please try again.");
@@ -97,43 +131,65 @@ export const fetchHomeData = () => async (dispatch) => {
   }
 };
 
-  // Logout Action
-    export const logout = (query, navigate) => async (dispatch) => {
-        dispatch(setIsLoading(true));
-        const result = await request.post("/logout", { "refreshToken": query});
-        dispatch(setIsLoading(false));
-        if (result.statusCode === 200) {
-            // Clear session data (JWT tokens)
-            localStorage.removeItem("token");
-            localStorage.removeItem("refreshToken");
-            toast.success(result.data.message);
-            navigate('/login');
-        dispatch(setIsLoading(false));
-    }};
+// Logout Action
+export const logout = (query, navigate) => async (dispatch) => {
+  dispatch(setIsLoading(true));
+  const result = await request.post("/logout", { "refreshToken": query });
+  dispatch(setIsLoading(false));
+  if (result.statusCode === 200) {
+    // Clear session data (JWT tokens)
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+    toast.success(result.data.message);
+    navigate('/login');
+    dispatch(setIsLoading(false));
+  }
+};
 
-    // forgot password Action
-    export const forgotPassword = (query, navigate) => async (dispatch) => {
-      dispatch(setIsLoading(true));
-      const result = await request.post("/forgot-password", query, { includeAuthorization: false });
-      dispatch(setIsLoading(false));
-      if (result.data.statusCode === 200) {
-        toast.success(result.data.message);
-        dispatch(setIsLoading(false));
-      }else if (result.data.statusCode === 409) {
-        toast.error(result.data.message);
-      }
-    };
+// forgot password Action
+export const forgotPassword = (query, navigate) => async (dispatch) => {
+  dispatch(setIsLoading(true));
+  const result = await request.post("/forgot-password", query, { includeAuthorization: false });
+  dispatch(setIsLoading(false));
+  if (result.data.statusCode === 200) {
+    toast.success(result.data.message);
+    dispatch(setIsLoading(false));
+  } else if (result.data.statusCode === 409) {
+    toast.error(result.data.message);
+  }
+};
 
-    // reset password Action
-    export const resetPassword = (query, navigate) => async (dispatch) => {
-      dispatch(setIsLoading(true));
-      const result = await request.post("/reset-password", query, { includeAuthorization: false });
-      dispatch(setIsLoading(false));
-      if (result.data.statusCode === 200) {
-        toast.success(result.data.message);
-        navigate('/login');
-        dispatch(setIsLoading(false));
-      }else if (result.data.statusCode === 409) {
-        toast.error(result.data.message);
-      }
-    };
+// reset password Action
+export const resetPassword = (query, navigate) => async (dispatch) => {
+  dispatch(setIsLoading(true));
+  const result = await request.post("/reset-password", query, { includeAuthorization: false });
+  dispatch(setIsLoading(false));
+  if (result.data.statusCode === 200) {
+    toast.success(result.data.message);
+    navigate('/login');
+    dispatch(setIsLoading(false));
+  } else if (result.data.statusCode === 409) {
+    toast.error(result.data.message);
+  }
+};
+
+export const fetchStockData = () => async (dispatch, getState) => {
+  const timeSeries = getState().authData.timeSeries;
+  const symbol = getState().authData.symbol;
+  dispatch(setIsLoading(true));
+  const result = await request.get(`/stockData/${timeSeries}/${symbol}`);
+  console.log(result); // Log the API response to check its structure
+  dispatch(setIsLoading(false));
+  dispatch(setStockData(result.data.allData));
+};
+
+export const fetchFinancialData = () => async (dispatch, getState) => {
+  const fundamentalFunctions = getState().authData.fundamentalFunctions;
+  const symbol = getState().authData.symbol;
+  dispatch(setIsLoading(true));
+  const result = await request.get(`/fundamentalData/${fundamentalFunctions}/${symbol}`);
+  console.log(result.data.allData[0].data.Information); // Log the API response to check its structure
+  if(result.data.allData[0].data.Information == 'Thank you for using Alpha Vantage! Our standard API rate limit is 25 requests per day. Please subscribe to any of the premium plans at https://www.alphavantage.co/premium/ to instantly remove all daily rate limits.'){ console.log('hiihihihi'); dispatch(setIsLoading(true));}
+  //dispatch(setIsLoading(false));
+  dispatch(setFundamentalData(result.data.allData[0]['data']));
+};
